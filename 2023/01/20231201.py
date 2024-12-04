@@ -26,11 +26,12 @@ digits_sum
 
 # %%
 # New digits
-digits = [str(d) for d in range(1,10)]
-named_digits = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
-digits.extend(named_digits)
+digits = [str(d) for d in range(10)] 
+named_digits = [ 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+all_digits = digits + named_digits  # Combine both types of digits
+
 # %%
-# Def new functions
+# Updated find_matches function
 def find_matches(input_string, elements):
     """
     Finds and returns a list of matches in the input string based on the elements provided.
@@ -42,19 +43,26 @@ def find_matches(input_string, elements):
     Returns:
         list: A list of matches in the order they appear in the input string.
     """
-    # Escape each element to make them regex-safe, and join with '|'
-    pattern = "|".join(elements)
+    # Escape elements for regex safety and join with '|'
+    pattern = '|'.join(map(re.escape, elements))
     matches = re.findall(pattern, input_string)
     return matches
-# %%
+
+# %% 
 # Tokenize
-tokens = [find_matches(row,digits) for row in data]
-# %%
+tokens = [find_matches(row, all_digits) for row in data]
+tokens
+# %% 
 # New 2 digits
 def new_2_digits(row):
-  return [row[0],row[-1]]
+    if len(row) >= 2:
+        return [row[0], row[-1]]
+    return row  # Return as-is if the row has less than 2 elements
+
 new_two_digits = [new_2_digits(row) for row in tokens]
-# %%
+new_two_digits
+
+# %% 
 # Mapping
 digit_mapping = {
     "one": "1",
@@ -68,14 +76,15 @@ digit_mapping = {
     "nine": "9"
 }
 
-# %%
+# %% 
 # Map
 def map_digits(row):
-  return [digit_mapping.get(d, d) for d in row]
+    return [digit_mapping.get(d, d) for d in row]
+
 mapped_digits = [map_digits(row) for row in new_two_digits]
-# %%
+
+# %% 
 # Result
-values = [int(''.join(row)) for row in mapped_digits]
+values = [int(''.join(row)) for row in mapped_digits if len(row) == 2]
 result = sum(values)
 result
-# %%
