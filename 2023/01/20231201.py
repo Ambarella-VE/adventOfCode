@@ -26,12 +26,12 @@ digits_sum
 
 # %%
 # New digits
-digits = [str(d) for d in range(1,10)]
+digits = [str(d) for d in range(0,10)]
 named_digits = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 digits.extend(named_digits)
 # %%
 # Def new functions
-def find_matches(input_string, elements):
+def find_matches(input_list, elements):
     """
     Finds and returns a list of matches in the input string based on the elements provided.
     
@@ -43,17 +43,22 @@ def find_matches(input_string, elements):
         list: A list of matches in the order they appear in the input string.
     """
     # Escape each element to make them regex-safe, and join with '|'
-    pattern = "|".join(elements)
-    matches = re.findall(pattern, input_string)
+    pattern = r"|".join(re.escape(element) for element in elements)
+    matches = []
+    for string in input_list:
+        # Find matches in the current string
+        matches.append([match.group() for match in re.finditer(pattern, string)])
     return matches
-# %%
+# %% 
 # Tokenize
-tokens = [find_matches(row,digits) for row in data]
+tokens = find_matches(data,digits)
+tokens
 # %%
 # New 2 digits
 def new_2_digits(row):
   return [row[0],row[-1]]
 new_two_digits = [new_2_digits(row) for row in tokens]
+new_two_digits
 # %%
 # Mapping
 digit_mapping = {
