@@ -25,5 +25,3 @@ sorted_df
 df_unique = sorted_df.drop_duplicates()
 df_unique
 # %%
- 
-# %%
